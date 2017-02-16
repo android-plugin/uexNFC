@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<link rel="stylesheet" type="text/css" href="css/index.css">
+
+<script type="text/javascript">
+
+	//回调
+	window.uexOnload = function(type) {
+
+		//判断设备是否支持NFC回调
+		uexNFC.cbIsNFCSupport = function(opCode, dataType, data) {
+			alert("------cbIsNFCSupport------\n" + data);
+		}
+		
+		//判断NFC是否开启回调
+		uexNFC.cbIsNFCOpen = function(opCode, dataType, data) {
+			alert("------cbIsNFCOpen------\n" + data);
+		}
+		
+		//配置NFC回调
+		uexNFC.cbConfigNFC = function(opCode, dataType, data) {
+			alert("------cbConfigNFC------\n" + data);
+		}
+		
+		//开始扫描NFC回调
+		uexNFC.cbStartScanNFC = function(opCode, dataType, data) {
+			alert("------cbStartScanNFC------\n" + data);
+		}
+		
+		//停止扫描NFC回调
+		uexNFC.cbStopScanNFC = function(opCode, dataType, data) {
+			alert("------cbStopScanNFC------\n" + data);
+		}
+		
+		//得到NFC数据回调
+		uexNFC.cbGetNFCData = function(opCode, dataType, data) {
+			alert("------cbGetNFCData------\n" + data);
+		}
+	}
+	
+	//配置NFC
+	function configNFC() {
+		var json = 
+				{
+					"tech":"1",			//协议类型
+					"cmds":[			//指令集,byte数组的十六进制字串符形式，用逗号区分；根据不同协议指令也不同
+					        "00,A4,04,00,0E,31,50,41,59,2E,53,59,53,2E,44,44,46,30,31,00",		//根据名字选择
+					        "00,B0,84,00,00",			//读取二进制
+					        "00,A4,00,00,02,10,01,00",		//根据id选择
+					        "80,5C,00,02,04",			//得到余额
+					        "00,B2,01,C5,00"				//读取记录
+					        ]
+				};
+		uexNFC.configNFC(JSON.stringify(json));
+	}
+	
+	
+</script>
+</head>
+
+<body>
+	<div class="tit">uexNFC</div>
+	<div class="conbor">
+		<div class="consj">
+		
+			<span>isNFCSupport</span>
+			<input class="btn" type="button" value="判断设备是否支持NFC功能" onclick="uexNFC.isNFCSupport()" /><br /> <br />
+
+			<span>isNFCOpen</span>
+			<input class="btn" type="button" value="判断设备NFC是否打开" onclick="uexNFC.isNFCOpen()" /><br /> <br />
+
+			<span>configNFC</span>
+			<input class="btn" type="button" value="配置NFC" onclick="configNFC()" /><br /> <br />
+
+			<span>startScanNFC</span>
+			<input class="btn" type="button" value="开始扫描NFC" onclick="uexNFC.startScanNFC()" /><br /> <br />
+			
+			<span>stopScanNFC</span>
+			<input class="btn" type="button" value="停止扫描NFC" onclick="uexNFC.stopScanNFC()" /><br /> <br />
+
+		</div>
+	</div>
+</body>
+</html>
