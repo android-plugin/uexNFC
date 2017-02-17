@@ -1,11 +1,5 @@
 package org.zywx.wbpalmstar.plugin.uexnfc;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.zywx.wbpalmstar.engine.EBrowserView;
-import org.zywx.wbpalmstar.engine.universalex.EUExBase;
-import org.zywx.wbpalmstar.engine.universalex.EUExCallback;
-
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -14,7 +8,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.zywx.wbpalmstar.base.BDebug;
+import org.zywx.wbpalmstar.engine.EBrowserView;
+import org.zywx.wbpalmstar.engine.universalex.EUExBase;
+import org.zywx.wbpalmstar.engine.universalex.EUExCallback;
 
 /**
  * 入口类
@@ -59,7 +59,7 @@ public class EUExNFC extends EUExBase {
     }
 
     public static void onActivityPause(Context context) {
-        Log.i(TAG, "【onActivityPause】");
+        BDebug.i(TAG, "【onActivityPause】");
     }
 
     /**
@@ -67,16 +67,17 @@ public class EUExNFC extends EUExBase {
      * 
      * @param param
      */
-    public void isNFCSupport(String[] param) {
+    public boolean isNFCSupport(String[] param) {
 
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(mContext);
         if (nfcAdapter == null) {// 为空则不支持
             jsCallback(CB_IS_NFC_SUPPORT, 0, EUExCallback.F_C_TEXT,
                     Constant.STATUS_FAIL);
-            return;
+            return false;
         }
         jsCallback(CB_IS_NFC_SUPPORT, 0, EUExCallback.F_C_TEXT,
                 Constant.STATUS_SUCCESS);
+        return true;
     }
 
     /**
@@ -84,21 +85,22 @@ public class EUExNFC extends EUExBase {
      * 
      * @param param
      */
-    public void isNFCOpen(String[] param) {
+    public boolean isNFCOpen(String[] param) {
 
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(mContext);
         if (nfcAdapter == null) {// 为空则不支持
             jsCallback(CB_IS_NFC_OPEN, 0, EUExCallback.F_C_TEXT,
                     Constant.STATUS_FAIL);
-            return;
+            return false;
         }
         if (!nfcAdapter.isEnabled()) {// isEnabled为false则未打开
             jsCallback(CB_IS_NFC_OPEN, 0, EUExCallback.F_C_TEXT,
                     Constant.STATUS_FAIL);
-            return;
+            return false;
         }
         jsCallback(CB_IS_NFC_OPEN, 0, EUExCallback.F_C_TEXT,
                 Constant.STATUS_SUCCESS);
+        return true;
     }
 
     /**
@@ -106,39 +108,40 @@ public class EUExNFC extends EUExBase {
      * 
      * @param param
      */
-    public void configNFC(String[] param) {
+    public boolean configNFC(String[] param) {
 
         if (mJsonNfcConfiguration == null) {
-            Log.i(TAG, "【configNFC】	mJsonNfcConfiguration == null");
+            BDebug.i(TAG, "【configNFC】	mJsonNfcConfiguration == null");
         } else {
-            Log.i(TAG, "【configNFC】	mJsonNfcConfiguration = "
+            BDebug.i(TAG, "【configNFC】	mJsonNfcConfiguration = "
                     + mJsonNfcConfiguration.toString());
         }
 
         if (param.length < 1) {
-            Log.e(TAG, "【configNFC】	param.length < 1");
-            return;
+            BDebug.e(TAG, "【configNFC】	param.length < 1");
+            return false;
         }
 
-        Log.i(TAG, "【configNFC】	param[0] = " + param[0]);
+        BDebug.i(TAG, "【configNFC】	param[0] = " + param[0]);
 
         try {
 
             mJsonNfcConfiguration = new JSONObject(param[0]);
-            Log.i(TAG, "【configNFC】	mJsonNfcConfiguration = "
+            BDebug.i(TAG, "【configNFC】	mJsonNfcConfiguration = "
                     + mJsonNfcConfiguration.toString());
             jsCallback(CB_CONFIG_NFC, 0, EUExCallback.F_C_TEXT,
                     Constant.STATUS_SUCCESS);
-
+            return true;
         } catch (JSONException e) {
 
             e.printStackTrace();
             mJsonNfcConfiguration = null;
-            Log.e(TAG, "【configNFC】	JSONException" + e.getMessage(), e);
+            BDebug.e(TAG, "【configNFC】	JSONException" + e.getMessage(), e);
             jsCallback(CB_CONFIG_NFC, 0, EUExCallback.F_C_TEXT,
                     Constant.STATUS_FAIL);
 
         }
+        return false;
     }
 
     /**
@@ -148,18 +151,18 @@ public class EUExNFC extends EUExBase {
      * 
      * @param param
      */
-    public void startScanNFC(String[] param) {
+    public boolean startScanNFC(String[] param) {
 
         // 这里将mNfcAdapter作为一个标志
         if (mNfcAdapter != null) {
 
-            Log.i(TAG, "【startScanNFC】	mNfcAdapter != null return");
+            BDebug.i(TAG, "【startScanNFC】	mNfcAdapter != null return");
 
             // 给前端失败回调
             jsCallback(CB_START_SCAN_NFC, 0, EUExCallback.F_C_TEXT,
                     Constant.STATUS_FAIL);
 
-            return;
+            return false;
         }
 
         // 注册本地广播接收器
@@ -190,7 +193,7 @@ public class EUExNFC extends EUExBase {
         // 给前端成功回调
         jsCallback(CB_START_SCAN_NFC, 0, EUExCallback.F_C_TEXT,
                 Constant.STATUS_SUCCESS);
-
+        return true;
     }
 
     /**
@@ -198,20 +201,20 @@ public class EUExNFC extends EUExBase {
      * 
      * @param param
      */
-    public void stopScanNFC(String[] param) {
+    public boolean stopScanNFC(String[] param) {
 
         if (mNfcAdapter == null) {
 
-            Log.i(TAG, "【stopScanNFC】	mNfcAdapter == null");
+            BDebug.i(TAG, "【stopScanNFC】	mNfcAdapter == null");
 
             // 给前端失败回调
             jsCallback(CB_STOP_SCAN_NFC, 0, EUExCallback.F_C_TEXT,
                     Constant.STATUS_FAIL);
 
-            return;
+            return false;
         }
 
-        Log.i(TAG, "【stopScanNFC】	mNfcAdapter != null");
+        BDebug.i(TAG, "【stopScanNFC】	mNfcAdapter != null");
 
         // 取消注册本地广播接收器
         unRegisterLocalReceiver();
@@ -225,12 +228,12 @@ public class EUExNFC extends EUExBase {
          */
         mNfcAdapter.disableForegroundDispatch((Activity) mContext);
         mNfcAdapter = null;
-        Log.i(TAG, "【stopScanNFC】	mNfcAdapter = null");
+        BDebug.i(TAG, "【stopScanNFC】	mNfcAdapter = null");
 
         // 给前端成功回调
         jsCallback(CB_STOP_SCAN_NFC, 0, EUExCallback.F_C_TEXT,
                 Constant.STATUS_SUCCESS);
-
+        return true;
     }
 
     /**
@@ -245,7 +248,7 @@ public class EUExNFC extends EUExBase {
 
         // 每次成功之后将mNfcAdapter置为空
         mNfcAdapter = null;
-        Log.i(TAG, "【cbGetNFCData】	mNfcAdapter = null");
+        BDebug.i(TAG, "【cbGetNFCData】	mNfcAdapter = null");
 
         jsCallback(CB_GET_NFC_DATA, 0, EUExCallback.F_C_TEXT, nfcData);
     }
@@ -301,7 +304,7 @@ public class EUExNFC extends EUExBase {
     @Override
     protected boolean clean() {
 
-        Log.i(TAG, "clean");
+        BDebug.i(TAG, "clean");
 
         // 注销广播接收器
         unRegisterLocalReceiver();
@@ -346,7 +349,7 @@ public class EUExNFC extends EUExBase {
         public void onReceive(Context context, Intent intent) {
 
             String action = intent.getAction();
-            Log.i(TAG, "【onReceive】		action = " + action);
+            BDebug.i(TAG, "【onReceive】		action = " + action);
 
             // 获取NFC信息成功广播
             if (action

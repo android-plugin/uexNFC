@@ -1,11 +1,5 @@
 package org.zywx.wbpalmstar.plugin.uexnfc;
 
-import java.lang.ref.WeakReference;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.zywx.wbpalmstar.engine.universalex.EUExUtil;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
@@ -14,7 +8,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.zywx.wbpalmstar.base.BDebug;
+import org.zywx.wbpalmstar.engine.universalex.EUExUtil;
+
+import java.lang.ref.WeakReference;
 
 /**
  * NFCActivity
@@ -63,7 +63,7 @@ public class NFCActivity extends Activity {
      */
     protected void onCreate(Bundle savedInstanceState) {
 
-        Log.i(TAG, "【onCreate】");
+        BDebug.i(TAG, "【onCreate】");
 
         super.onCreate(savedInstanceState);
         setContentView(EUExUtil.getResLayoutID("plugin_uexnfc_activity_nfc"));
@@ -79,7 +79,7 @@ public class NFCActivity extends Activity {
      */
     protected void onDestroy() {
 
-        Log.i(TAG, "【onDestroy】");
+        BDebug.i(TAG, "【onDestroy】");
 
         super.onDestroy();
 
@@ -96,7 +96,7 @@ public class NFCActivity extends Activity {
      */
     protected void onNewIntent(Intent intent) {
 
-        Log.i(TAG, "【onNewIntent】");
+        BDebug.i(TAG, "【onNewIntent】");
 
         super.onNewIntent(intent);
 
@@ -122,14 +122,14 @@ public class NFCActivity extends Activity {
             try {
 
                 mJsonNfcConfiguration = new JSONObject(jsonStrNfcConfiguration);
-                Log.i(TAG, "【resolveIntent】	mJsonNfcConfiguration"
+                BDebug.i(TAG, "【resolveIntent】	mJsonNfcConfiguration"
                         + mJsonNfcConfiguration.toString());
 
             } catch (JSONException e) {
 
                 e.printStackTrace();
                 mJsonNfcConfiguration = null;
-                Log.e(TAG, "【resolveIntent】	JSONException" + e.getMessage(), e);
+                BDebug.e(TAG, "【resolveIntent】	JSONException" + e.getMessage(), e);
 
             }
         }
@@ -137,7 +137,7 @@ public class NFCActivity extends Activity {
         // 如果Action==null，直接return
         if (action == null) {
 
-            Log.e(TAG, "【resolveIntent】	action == null");
+            BDebug.e(TAG, "【resolveIntent】	action == null");
             return;
         }
 

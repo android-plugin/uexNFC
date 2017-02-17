@@ -1,15 +1,5 @@
 package org.zywx.wbpalmstar.plugin.uexnfc;
 
-import java.io.IOException;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.zywx.wbpalmstar.plugin.uexnfc.bean.MifareClassicBean;
-import org.zywx.wbpalmstar.plugin.uexnfc.bean.NFCBaseBean;
-import org.zywx.wbpalmstar.plugin.uexnfc.mifareclassic.MifareClassicHelper;
-import org.zywx.wbpalmstar.plugin.uexnfc.utils.Util;
-
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.nfc.tech.MifareClassic;
@@ -17,8 +7,18 @@ import android.nfc.tech.NfcA;
 import android.nfc.tech.NfcB;
 import android.nfc.tech.NfcF;
 import android.nfc.tech.NfcV;
-import android.util.Log;
 import android.util.SparseArray;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.zywx.wbpalmstar.base.BDebug;
+import org.zywx.wbpalmstar.plugin.uexnfc.bean.MifareClassicBean;
+import org.zywx.wbpalmstar.plugin.uexnfc.bean.NFCBaseBean;
+import org.zywx.wbpalmstar.plugin.uexnfc.mifareclassic.MifareClassicHelper;
+import org.zywx.wbpalmstar.plugin.uexnfc.utils.Util;
+
+import java.io.IOException;
 
 /**
  * NFC管理器
@@ -97,7 +97,7 @@ public class NFCManager {
 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-                Log.e(TAG,
+                BDebug.e(TAG,
                         "【getTagInfo】	NumberFormatException" + e.getMessage(),
                         e);
             }
@@ -125,14 +125,14 @@ public class NFCManager {
             // 如果该标签不支持IsoDep类型
             if (IsoDep.get(tag) == null) {
 
-                Log.e(TAG, "【getTagInfo】	该标签不支持IsoDep类型");
+                BDebug.e(TAG, "【getTagInfo】	该标签不支持IsoDep类型");
                 return jsonBaseInfo;
             }
 
             // 如果指令集为null
             if (jsonArrayCmds == null) {
 
-                Log.e(TAG, "【getTagInfo】	指令集为null");
+                BDebug.e(TAG, "【getTagInfo】	指令集为null");
                 return jsonBaseInfo;
             }
 
@@ -143,7 +143,7 @@ public class NFCManager {
                 isoDep.connect();
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG, "【getTagInfo】	isoDep.connect()" + e.getMessage(), e);
+                BDebug.e(TAG, "【getTagInfo】	isoDep.connect()" + e.getMessage(), e);
                 return jsonBaseInfo;
             }
 
@@ -193,14 +193,14 @@ public class NFCManager {
             // 如果该标签不支持NfcA类型
             if (NfcA.get(tag) == null) {
 
-                Log.e(TAG, "【getTagInfo】	该标签不支持NfcA类型");
+                BDebug.e(TAG, "【getTagInfo】	该标签不支持NfcA类型");
                 return jsonBaseInfo;
             }
 
             // 如果指令集为null
             if (jsonArrayCmds == null) {
 
-                Log.e(TAG, "【getTagInfo】	指令集为null");
+                BDebug.e(TAG, "【getTagInfo】	指令集为null");
                 return jsonBaseInfo;
             }
 
@@ -211,7 +211,7 @@ public class NFCManager {
                 nfcA.connect();
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG, "【getTagInfo】	nfcA.connect()" + e.getMessage(), e);
+                BDebug.e(TAG, "【getTagInfo】	nfcA.connect()" + e.getMessage(), e);
                 return jsonBaseInfo;
             }
 
@@ -261,14 +261,14 @@ public class NFCManager {
             // 如果该标签不支持NfcB类型
             if (NfcB.get(tag) == null) {
 
-                Log.e(TAG, "【getTagInfo】	该标签不支持NfcB类型");
+                BDebug.e(TAG, "【getTagInfo】	该标签不支持NfcB类型");
                 return jsonBaseInfo;
             }
 
             // 如果指令集为null
             if (jsonArrayCmds == null) {
 
-                Log.e(TAG, "【getTagInfo】	指令集为null");
+                BDebug.e(TAG, "【getTagInfo】	指令集为null");
                 return jsonBaseInfo;
             }
 
@@ -279,7 +279,7 @@ public class NFCManager {
                 nfcB.connect();
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG, "【getTagInfo】	nfcB.connect()" + e.getMessage(), e);
+                BDebug.e(TAG, "【getTagInfo】	nfcB.connect()" + e.getMessage(), e);
                 return jsonBaseInfo;
             }
 
@@ -329,14 +329,14 @@ public class NFCManager {
             // 如果该标签不支持NfcF类型
             if (NfcF.get(tag) == null) {
 
-                Log.e(TAG, "【getTagInfo】	该标签不支持NfcF类型");
+                BDebug.e(TAG, "【getTagInfo】	该标签不支持NfcF类型");
                 return jsonBaseInfo;
             }
 
             // 如果指令集为null
             if (jsonArrayCmds == null) {
 
-                Log.e(TAG, "【getTagInfo】	指令集为null");
+                BDebug.e(TAG, "【getTagInfo】	指令集为null");
                 return jsonBaseInfo;
             }
 
@@ -347,7 +347,7 @@ public class NFCManager {
                 nfcF.connect();
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG, "【getTagInfo】	nfcF.connect()" + e.getMessage(), e);
+                BDebug.e(TAG, "【getTagInfo】	nfcF.connect()" + e.getMessage(), e);
                 return jsonBaseInfo;
             }
 
@@ -397,14 +397,14 @@ public class NFCManager {
             // 如果该标签不支持NfcV类型
             if (NfcV.get(tag) == null) {
 
-                Log.e(TAG, "【getTagInfo】	该标签不支持NfcV类型");
+                BDebug.e(TAG, "【getTagInfo】	该标签不支持NfcV类型");
                 return jsonBaseInfo;
             }
 
             // 如果指令集为null
             if (jsonArrayCmds == null) {
 
-                Log.e(TAG, "【getTagInfo】	指令集为null");
+                BDebug.e(TAG, "【getTagInfo】	指令集为null");
                 return jsonBaseInfo;
             }
 
@@ -415,7 +415,7 @@ public class NFCManager {
                 nfcV.connect();
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG, "【getTagInfo】	nfcV.connect()" + e.getMessage(), e);
+                BDebug.e(TAG, "【getTagInfo】	nfcV.connect()" + e.getMessage(), e);
                 return jsonBaseInfo;
             }
 
@@ -481,7 +481,7 @@ public class NFCManager {
                 return jsonBaseInfo;
             }
 
-            Log.i(TAG, "【getTagInfo】	类型 : MifareClassic");
+            BDebug.i(TAG, "【getTagInfo】	类型 : MifareClassic");
 
             MifareClassicHelper mifareClassicHelper = new MifareClassicHelper(
                     tag);
@@ -525,7 +525,7 @@ public class NFCManager {
 
         // 十六进制id
         String tagIdHex = Util.byte2HexString(tagId);
-        Log.i(TAG, "【getBaseInfo】	tagIdHex = " + tagIdHex);
+        BDebug.i(TAG, "【getBaseInfo】	tagIdHex = " + tagIdHex);
 
         // 支持协议类型
         StringBuffer sb = new StringBuffer();
@@ -536,7 +536,7 @@ public class NFCManager {
         }
         sb.delete(sb.length() - 1, sb.length());// 删除多余的逗号
         String technologies = sb.toString();
-        Log.i(TAG, "【getBaseInfo】	technologies = " + technologies);
+        BDebug.i(TAG, "【getBaseInfo】	technologies = " + technologies);
 
         baseBean.setTagId(tagId);
         baseBean.setTagIdHex(tagIdHex);
@@ -585,7 +585,7 @@ public class NFCManager {
 
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e(TAG, "【packageData】	封装基础信息进一个JSON中" + e.getMessage(), e);
+            BDebug.e(TAG, "【packageData】	封装基础信息进一个JSON中" + e.getMessage(), e);
         }
 
         /*
@@ -635,7 +635,7 @@ public class NFCManager {
             }
         }
 
-        Log.i(TAG, "【packageData】	最终返回jsonObject = " + jsonObject.toString());
+        BDebug.i(TAG, "【packageData】	最终返回jsonObject = " + jsonObject.toString());
         return jsonObject;
     }
 }

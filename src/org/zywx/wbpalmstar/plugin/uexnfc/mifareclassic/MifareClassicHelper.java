@@ -1,14 +1,14 @@
 package org.zywx.wbpalmstar.plugin.uexnfc.mifareclassic;
 
-import java.io.IOException;
-
-import org.zywx.wbpalmstar.plugin.uexnfc.bean.MifareClassicBean;
-import org.zywx.wbpalmstar.plugin.uexnfc.utils.Util;
-
 import android.nfc.Tag;
 import android.nfc.tech.MifareClassic;
 import android.util.Log;
 import android.util.SparseArray;
+
+import org.zywx.wbpalmstar.plugin.uexnfc.bean.MifareClassicBean;
+import org.zywx.wbpalmstar.plugin.uexnfc.utils.Util;
+
+import java.io.IOException;
 
 /**
  * MifareClassic类型操作辅助类
