@@ -2,11 +2,15 @@ package org.zywx.wbpalmstar.plugin.uexnfc;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.nfc.NfcManager;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 
 import org.json.JSONException;
@@ -15,6 +19,8 @@ import org.zywx.wbpalmstar.base.BDebug;
 import org.zywx.wbpalmstar.engine.universalex.EUExUtil;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * NFCActivity
@@ -168,8 +174,60 @@ public class NFCActivity extends Activity {
                 }
             }).start();
 
-        }
+        }else if (action.equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {//从标签读取数据（Parcelable对象）
+            // 得到Tag
+            final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    final JSONObject jsonObject = NFCManager.getInstance()
+                            .getTagInfo(mJsonNfcConfiguration, tag);
+
+                    Parcelable[] rawMsgs = getIntent().getParcelableArrayExtra(
+                            NfcAdapter.EXTRA_NDEF_MESSAGES);
+
+                    NdefMessage msgs[] = null;
+                    int contentSize = 0;
+                    if (rawMsgs != null) {
+                        msgs = new NdefMessage[rawMsgs.length];
+                        //标签可能存储了多个NdefMessage对象，一般情况下只有一个NdefMessage对象
+                        for (int i = 0; i < rawMsgs.length; i++) {
+                            //转换成NdefMessage对象
+                            msgs[i] = (NdefMessage) rawMsgs[i];
+                            //计算数据的总长度
+                            contentSize += msgs[i].toByteArray().length;
+                        }
+                    }
+                    List<List<String>> result=new ArrayList<List<String>>();
+                    try {
+                        if (msgs != null) {
+                            for (int i = 0; i < msgs.length; i++) {
+                                List<String> msgResult=new ArrayList<String>();
+                                NdefRecord[] records=msgs[i].getRecords();
+                                if (records!=null){
+                                    for (int j = 0; j < records.length; j++) {
+                                        TextRecord textRecord=TextRecord.parse(records[j]);
+                                        msgResult.add(textRecord.getText());
+                                    }
+                                }
+                                result.add(msgResult);
+                            }
+                            jsonObject.put("data",result);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    sendBroadcastAndFinish(jsonObject);
+                                }
+                            });
+                        }
+
+                    } catch (Exception e) {
+                    }
+                }
+            }).start();
+        }
     }
 
     /**
