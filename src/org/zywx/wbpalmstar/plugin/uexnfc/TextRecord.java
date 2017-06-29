@@ -27,6 +27,21 @@ public class TextRecord {
 
     //  将纯文本内容从NdefRecord对象（payload）中解析出来
     public static TextRecord parse(NdefRecord record) {
+
+        //验证TNF是否为NdefRecord.TNF_MIME_MEDIA
+        if (record.getTnf() == NdefRecord.TNF_MIME_MEDIA) {
+
+            //获取payload
+            byte[] payload = record.getPayload();
+
+            //解析出实际的文本数据
+            String text = new String(payload);
+            //创建一个TextRecord对象，并返回该对象
+            return new TextRecord(text);
+
+        }
+
+
         //验证TNF是否为NdefRecord.TNF_WELL_KNOWN
         if (record.getTnf() != NdefRecord.TNF_WELL_KNOWN)
             return null;

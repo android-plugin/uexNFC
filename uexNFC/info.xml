@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <uexplugins>
-    <plugin 
-        uexName="uexNFC" version="4.0.1" build = "1">
-        <info>1:支持读取NDEF数据</info>
+    <plugin
+        uexName="uexNFC" version="4.0.2" build = "2">
+        <info>2:支持读取Payload数据</info>
+        <build>1:支持读取NDEF数据</build>
         <build>0:uexNFC插件</build>
     </plugin>
 </uexplugins>
